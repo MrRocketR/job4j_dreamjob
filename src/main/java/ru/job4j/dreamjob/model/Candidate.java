@@ -35,7 +35,7 @@ public class Candidate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, created);
+        return Objects.hash(id);
     }
 
     public int getId() {
