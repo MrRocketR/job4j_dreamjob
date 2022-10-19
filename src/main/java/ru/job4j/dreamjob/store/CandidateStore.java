@@ -2,6 +2,7 @@ package ru.job4j.dreamjob.store;
 
 
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.Post;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,7 +29,19 @@ public class CandidateStore {
         return INST;
     }
 
+    public Candidate findById(int id) {
+        return candidates.get(id);
+    }
+
     public Collection<Candidate> findAll() {
         return candidates.values();
+    }
+
+    public void update(Candidate c) {
+        candidates.replace(c.getId(), c);
+    }
+
+    public void add(Candidate candidate) {
+       INST.candidates.put(candidate.getId(), candidate);
     }
 }
