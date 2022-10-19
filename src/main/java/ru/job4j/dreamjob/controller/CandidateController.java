@@ -19,7 +19,7 @@ public class CandidateController {
     }
 
     @GetMapping("/formAddCandidates")
-    public String addPost(Model model) {
+    public String addCandidates(Model model) {
         model.addAttribute("candidate", new Candidate(0, "Имя кандидата", "Описание", LocalDateTime.now()));
         return "addCandidates";
     }
