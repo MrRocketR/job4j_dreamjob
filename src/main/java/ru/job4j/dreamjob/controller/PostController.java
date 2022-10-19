@@ -23,15 +23,15 @@ public class PostController {
         return "posts";
     }
 
+    @GetMapping("/formAddPost")
+    public String formAddPost(Model model) {
+        return "addPost";
+    }
+
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id) {
         model.addAttribute("post", postStore.findById(id));
         return "updatePost";
-    }
-
-    @GetMapping("/formAddPost")
-    public String formAddPost(Model model) {
-        return "addPost";
     }
 
     @PostMapping("/updatePost")
