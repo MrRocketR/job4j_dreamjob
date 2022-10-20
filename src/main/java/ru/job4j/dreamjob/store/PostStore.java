@@ -25,7 +25,7 @@ public class PostStore {
     public void add(Post p) {
         int id = idGen.incrementAndGet();
         p.setId(id);
-        INST.posts.put(p.getId(), p);
+        posts.put(p.getId(), p);
     }
 
     public static PostStore instOf() {
