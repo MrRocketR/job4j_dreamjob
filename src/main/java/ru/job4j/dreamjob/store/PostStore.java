@@ -7,10 +7,12 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PostStore {
 
     private static final PostStore INST = new PostStore();
+    private final AtomicInteger idGen = new AtomicInteger(0);
 
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
@@ -21,6 +23,8 @@ public class PostStore {
     }
 
     public void add(Post p) {
+        int id = idGen.incrementAndGet();
+        p.setId(id);
         INST.posts.put(p.getId(), p);
     }
 
