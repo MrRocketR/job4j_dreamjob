@@ -22,14 +22,14 @@ public class PostStore {
         posts.put(3, new Post(3, "Senior Java Job", "Doogle", LocalDateTime.now()));
     }
 
+    public static PostStore instOf() {
+        return INST;
+    }
+
     public void add(Post p) {
         int id = idGen.incrementAndGet();
         p.setId(id);
         posts.put(p.getId(), p);
-    }
-
-    public static PostStore instOf() {
-        return INST;
     }
 
     public Collection<Post> findAll() {
