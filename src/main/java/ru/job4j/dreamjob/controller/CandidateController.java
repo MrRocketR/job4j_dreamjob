@@ -36,13 +36,13 @@ public class CandidateController {
     }
 
     @PostMapping("/updateCandidate")
-    public String updatePost(@ModelAttribute Candidate candidate) {
+    public String updateCandidate(@ModelAttribute Candidate candidate) {
         service.update(candidate);
         return "redirect:/candidates";
     }
 
     @PostMapping("/createCandidate")
-    public String createPost(@ModelAttribute Candidate candidate) {
+    public String addCandidate(@ModelAttribute Candidate candidate) {
         service.add(candidate);
         return "redirect:/candidates";
     }
