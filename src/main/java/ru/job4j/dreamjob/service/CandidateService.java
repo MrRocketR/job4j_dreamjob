@@ -1,4 +1,4 @@
-package ru.job4j.dreamjob.services;
+package ru.job4j.dreamjob.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
