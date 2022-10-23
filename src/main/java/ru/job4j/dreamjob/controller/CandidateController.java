@@ -9,15 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.service.CandidateService;
+import ru.job4j.dreamjob.service.CityService;
 
 @Controller
 @ThreadSafe
 public class CandidateController {
 
     private final CandidateService service;
+    private final CityService cityService;
 
-    public CandidateController(CandidateService service) {
+    public CandidateController(CandidateService service, CityService cityService) {
         this.service = service;
+        this.cityService = cityService;
     }
 
     @GetMapping("/candidates")
@@ -28,6 +31,7 @@ public class CandidateController {
 
     @GetMapping("/formAddCandidate")
     public String formAddCandidate(Model model) {
+        model.addAttribute("cities", cityService.getAllCities());
         return "addCandidate";
     }
 

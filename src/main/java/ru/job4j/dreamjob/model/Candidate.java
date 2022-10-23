@@ -8,6 +8,7 @@ public class Candidate {
     private int id;
     private String name;
     private String description;
+    private City city;
     private LocalDateTime created;
 
     public Candidate() {
