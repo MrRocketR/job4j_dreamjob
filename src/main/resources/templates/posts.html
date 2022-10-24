@@ -64,7 +64,8 @@
         </span>
                 </td>
                 <td th:text="${post.description}"/>
-                <td th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"/>
+                <select class="form-control" id="city.id" name="city.id">
+                <td th:text="${post.city.name}"/>
                 <td th:text="${post.created}"/>
             </tr>
             </tbody>
