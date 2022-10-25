@@ -48,7 +48,6 @@ public class PostController {
     }
 
 
-
     @PostMapping("/updatePost")
     public String updatePost(@ModelAttribute Post post, @RequestParam("city.id") int id) {
         post.setCity(cityService.findById(id));
