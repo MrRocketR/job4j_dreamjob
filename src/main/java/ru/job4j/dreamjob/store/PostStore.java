@@ -22,10 +22,10 @@ public class PostStore {
 
     private PostStore() {
         posts.put(1, new Post(1, "Junior Java Job", "ОАО Рога и Копыта",
-                new City(1, "Москва"), LocalDateTime.now()));
-        posts.put(2, new Post(2, "Middle Java Job", "Xandex", new City(2, "СПб"),
                 LocalDateTime.now()));
-        posts.put(3, new Post(3, "Senior Java Job", "Doogle", new City(3, "Екб"),
+        posts.put(2, new Post(2, "Middle Java Job", "Xandex",
+                LocalDateTime.now()));
+        posts.put(3, new Post(3, "Senior Java Job", "Doogle",
                 LocalDateTime.now()));
     }
 

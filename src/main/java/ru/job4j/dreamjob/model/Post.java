@@ -16,11 +16,10 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(int id, String name, String description, City city, LocalDateTime created) {
+    public Post(int id, String name, String description, LocalDateTime created) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.city = city;
         this.created = created;
 
     }
@@ -86,5 +85,9 @@ public class Post implements Serializable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }
