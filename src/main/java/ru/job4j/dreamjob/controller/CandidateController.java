@@ -15,6 +15,8 @@ import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.service.CandidateService;
 import ru.job4j.dreamjob.service.CityService;
 
+import java.io.IOException;
+
 @Controller
 @ThreadSafe
 public class CandidateController {
@@ -33,9 +35,17 @@ public class CandidateController {
         return "candidates";
     }
 
-    @GetMapping("/createCandidate")
-    public String createCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id) {
+    @GetMapping("/addCandidate")
+    public String addCandidate(Model model) {
+        model.addAttribute("cities", cityService.getAllCities());
+        return "addCandidate";
+    }
+
+    @PostMapping("/createCandidate")
+    public String createCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id,
+                                  @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setCity(cityService.findById(id));
+        candidate.setPhoto(file.getBytes());
         service.add(candidate);
         return "redirect:/candidates";
     }
@@ -46,21 +56,15 @@ public class CandidateController {
         model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
     }
-
-
-    @GetMapping("/addCandidate")
-    public String formAddCandidate(Model model) {
-        model.addAttribute("cities", cityService.getAllCities());
-        return "addCandidate";
-    }
-
-
     @PostMapping("/updateCandidate")
-    public String updateCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id) {
+    public String updateCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id,
+                                  @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setCity(cityService.findById(id));
+        candidate.setPhoto(file.getBytes());
         service.update(candidate);
         return "redirect:/candidates";
     }
+
 
     @GetMapping("/photoCandidate/{candidateId}")
     public ResponseEntity<Resource> download(@PathVariable("candidateId") Integer candidateId) {
