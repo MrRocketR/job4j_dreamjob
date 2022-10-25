@@ -87,4 +87,11 @@ public class Candidate {
     }
 
 
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 }

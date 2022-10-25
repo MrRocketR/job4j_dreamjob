@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.store.CandidateStore;
 
 import java.util.Collection;
@@ -11,11 +12,22 @@ import java.util.Collection;
 @ThreadSafe
 public class CandidateService {
     private final CandidateStore store;
+    private final CityService cityService;
 
-    public CandidateService(CandidateStore store) {
+    public CandidateService(CandidateStore store, CityService cityService) {
         this.store = store;
+        this.cityService = cityService;
     }
 
+    public Collection<Candidate> findAll() {
+        Collection<Candidate> posts = store.findAll();
+        posts.forEach(
+                candidate -> candidate.setCity(
+                        cityService.findById(candidate.getCity().getId())
+                )
+        );
+        return store.findAll();
+    }
 
     public void add(Candidate candidate) {
         store.add(candidate);
@@ -25,9 +37,6 @@ public class CandidateService {
         return store.findById(id);
     }
 
-    public Collection<Candidate> findAll() {
-        return store.findAll();
-    }
 
     public void update(Candidate candidate) {
         store.update(candidate);

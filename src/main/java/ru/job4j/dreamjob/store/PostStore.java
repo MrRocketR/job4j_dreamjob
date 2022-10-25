@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PostStore {
 
     private final AtomicInteger idGen = new AtomicInteger(3);
-
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
     private PostStore() {
@@ -27,22 +26,28 @@ public class PostStore {
                 LocalDateTime.now()));
         posts.put(3, new Post(3, "Senior Java Job", "Doogle",
                 LocalDateTime.now()));
+        posts.get(1).setCity(new City(1, "Москва"));
+        posts.get(2).setCity(new City(2, "СПБ"));
+        posts.get(3).setCity(new City(3, "ЕКБ"));
+    }
+    public Collection<Post> findAll() {
+        return posts.values();
     }
 
     public void add(Post post) {
         post.setId(idGen.incrementAndGet());
+        post.setCreated(LocalDateTime.now());
         posts.put(post.getId(), post);
-    }
-
-    public Collection<Post> findAll() {
-        return posts.values();
     }
 
     public Post findById(int id) {
         return posts.get(id);
     }
 
+
+
     public void update(Post post) {
+        post.setCreated(posts.get(post.getId()).getCreated());
         posts.replace(post.getId(), post);
     }
 }

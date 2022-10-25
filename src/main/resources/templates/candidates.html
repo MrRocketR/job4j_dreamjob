@@ -26,9 +26,9 @@
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="#">Главная <span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" th:href="@{/posts}">Вакансии</a>
-            <a class="nav-item nav-link" th:href="@{/formAddPost}">Добавить вакансию</a>
+            <a class="nav-item nav-link" th:href="@{/addPost}">Добавить вакансию</a>
             <a class="nav-item nav-link" th:href="@{/candidates}">Кандидаты</a>
-            <a class="nav-item nav-link active" th:href="@{/formAddCandidate}">Добавить кандидата</a>
+            <a class="nav-item nav-link active" th:href="@{/addCandidate}">Добавить кандидата</a>
         </div>
     </div>
 </nav>
@@ -41,8 +41,9 @@
                 <th scope="col">Имя</th>
                 <th scope="col">Описание</th>
                 <th scope="col">Город</th>
-                <th scope="col">Фото</th>
                 <th scope="col">Дата</th>
+                <th scope="col">Фото</th>
+
             </tr>
             </thead>
             <tbody>
@@ -55,12 +56,14 @@
                     <span th:text="${candidate.name}"></span>
                 </td>
                 <td th:text="${candidate.description}" />
-                <td th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"/>
+                <td>
+                    <span th:text="${candidate?.city?.name}"></span>
+                </td>
+                <td th:text="${#temporals.format(candidate.created, 'dd-MM-yyyy HH:mm')}" />
                 <td>
                     <img th:width="150" th:high="150" th:src="@{|/photoCandidate/${candidate.id}|}">
                     <span th:text="${candidate.name}"></span>
                 </td>
-                <td th:text="${candidate.created}" />
             </tr>
             </tbody>
         </table>

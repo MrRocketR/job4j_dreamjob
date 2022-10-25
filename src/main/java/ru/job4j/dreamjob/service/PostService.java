@@ -6,6 +6,7 @@ import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.store.PostStore;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @ThreadSafe
@@ -13,18 +14,27 @@ public class PostService {
 
     private final PostStore store;
 
-    public PostService(PostStore store) {
+    private final CityService cityService;
+
+    public PostService(PostStore store, CityService cityService) {
         this.store = store;
+        this.cityService = cityService;
     }
 
-    public void add(Post p) {
-        store.add(p);
-    }
 
     public Collection<Post> findAll() {
+        Collection<Post> posts = store.findAll();
+        posts.forEach(
+                post -> post.setCity(
+                        cityService.findById(post.getCity().getId())
+                )
+        );
         return store.findAll();
     }
 
+    public void add(Post post) {
+        store.add(post);
+    }
     public Post findById(int id) {
         return store.findById(id);
     }

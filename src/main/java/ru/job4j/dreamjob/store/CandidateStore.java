@@ -4,6 +4,7 @@ package ru.job4j.dreamjob.store;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
 import java.time.LocalDate;
@@ -26,24 +27,30 @@ public class CandidateStore {
                 "Junior Java Developer", LocalDateTime.now()));
         candidates.put(3, new Candidate(3, "Masha",
                 "Middle Java Developer", LocalDateTime.now()));
-    }
-
-
-    public Candidate findById(int id) {
-        return candidates.get(id);
+        candidates.get(1).setCity(new City(1, "Москва"));
+        candidates.get(2).setCity(new City(2, "СПБ"));
+        candidates.get(3).setCity(new City(3, "ЕКБ"));
     }
 
     public Collection<Candidate> findAll() {
         return candidates.values();
     }
-
-    public void update(Candidate c) {
-        candidates.replace(c.getId(), c);
-    }
-
     public void add(Candidate candidate) {
-        int id = idGen.incrementAndGet();
-        candidate.setId(id);
+        candidate.setId(idGen.incrementAndGet());
+        candidate.setCreated(LocalDateTime.now());
         candidates.put(candidate.getId(), candidate);
     }
+
+    public Candidate findById(int id) {
+        return candidates.get(id);
+    }
+
+
+
+    public void update(Candidate candidate) {
+        candidate.setCreated(candidates.get(candidate.getId()).getCreated());
+        candidates.replace(candidate.getId(), candidate);
+    }
+
+
 }

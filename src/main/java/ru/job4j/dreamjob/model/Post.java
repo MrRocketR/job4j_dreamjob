@@ -90,4 +90,8 @@ public class Post implements Serializable {
     public void setCity(City city) {
         this.city = city;
     }
+
+    public City getCity() {
+        return city;
+    }
 }
