@@ -48,7 +48,6 @@ public class CandidateStore {
 
 
     public void update(Candidate candidate) {
-        candidate.setCreated(candidates.get(candidate.getId()).getCreated());
         candidates.replace(candidate.getId(), candidate);
     }
 
