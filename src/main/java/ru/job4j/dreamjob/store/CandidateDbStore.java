@@ -11,6 +11,7 @@ import ru.job4j.dreamjob.model.Candidate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class CandidateDbStore {
     public List<Candidate> findAll() {
         List<Candidate> candidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -44,7 +45,7 @@ public class CandidateDbStore {
 
     public Candidate add(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name, city_id) VALUES (?, ?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
@@ -56,13 +57,14 @@ public class CandidateDbStore {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.trace(e);
         }
         return candidate;
     }
 
     public void update(Candidate candidate) {
-        String sql = "UPDATE post SET name = (?),  city_id = (?) "
+        String sql = "UPDATE candidate SET name = (?),  city_id = (?) "
                 + "WHERE id =  (?)";
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -77,7 +79,7 @@ public class CandidateDbStore {
 
     public Candidate findById(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id = ?")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -89,6 +91,13 @@ public class CandidateDbStore {
             LOG.trace(e);
         }
         return null;
+    }
+
+    public void wipeOut() throws SQLException {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement statement = cn.prepareStatement("delete from candidate")) {
+            statement.execute();
+        }
     }
 
 }
