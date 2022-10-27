@@ -58,7 +58,7 @@ public class PostDBStore {
         return post;
     }
 
-    private void update(Post post) {
+    public void update(Post post) {
         String sql = "UPDATE post SET name = (?),  city.id = (?) "
                 + "WHERE id =  (?)";
         try (Connection cn = pool.getConnection();
