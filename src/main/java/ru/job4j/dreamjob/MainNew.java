@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-
+@SpringBootApplication
 public class MainNew {
 
     private Properties loadDbProperties() {
@@ -32,7 +32,7 @@ public class MainNew {
         return cfg;
     }
 
-
+    @Bean
     public BasicDataSource loadPool() {
         Properties cfg = loadDbProperties();
         BasicDataSource pool = new BasicDataSource();
