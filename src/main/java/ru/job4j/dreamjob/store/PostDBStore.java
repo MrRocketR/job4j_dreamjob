@@ -9,6 +9,7 @@ import ru.job4j.dreamjob.model.Post;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class PostDBStore {
     }
 
     public void update(Post post) {
-        String sql = "UPDATE post SET name = (?),  city.id = (?) "
+        String sql = "UPDATE post SET name = (?),  city_id = (?) "
                 + "WHERE id =  (?)";
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -87,4 +88,13 @@ public class PostDBStore {
         }
         return null;
     }
+
+
+    public void wipeOut() throws SQLException {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement statement = cn.prepareStatement("delete from post")) {
+            statement.execute();
+        }
+    }
+
 }
