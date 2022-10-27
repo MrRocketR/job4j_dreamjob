@@ -24,6 +24,12 @@ public class Post implements Serializable {
 
     }
 
+    public Post(int id, String name, City city) {
+        this.id = id;
+        this.name = name;
+        this.city = city;
+    }
+
     public Post(int id, String name) {
         this.id = id;
         this.name = name;
@@ -94,4 +100,5 @@ public class Post implements Serializable {
     public City getCity() {
         return city;
     }
+
 }

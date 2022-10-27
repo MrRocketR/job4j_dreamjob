@@ -23,6 +23,12 @@ public class Candidate {
         this.created = created;
     }
 
+    public Candidate(int id, String name, City city) {
+        this.id = id;
+        this.name = name;
+        this.city = city;
+    }
+
     public Candidate(int id, String name) {
         this.id = id;
         this.name = name;
