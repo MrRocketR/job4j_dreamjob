@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
@@ -11,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class PostDBStore {
@@ -108,7 +110,7 @@ public class PostDBStore {
 
     public void wipeOut() throws SQLException {
         try (Connection cn = pool.getConnection();
-             PreparedStatement statement = cn.prepareStatement("delete from post")) {
+             PreparedStatement statement = cn.prepareStatement("TRUNCATE TABLE post")) {
             statement.execute();
         }
     }
