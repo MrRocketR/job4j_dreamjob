@@ -6,18 +6,21 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.Post;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CandidateDbStore {
 
+    private static final String FIND = "SELECT * FROM candidate";
+    private static final String ADD = "INSERT INTO post(name, description, created) VALUES(?, ?, ?)";
+    private static final String UPDATE = "UPDATE candidate SET name = ?, description = ?, created = ? where id = ?";
+    private static final String FIND_BY_ID = "SELECT * FROM candidate WHERE id = ?";
     private static final Logger LOG = LogManager.getLogger(CandidateDbStore.class.getName());
 
     private final BasicDataSource pool;
@@ -29,15 +32,23 @@ public class CandidateDbStore {
     public List<Candidate> findAll() {
         List<Candidate> candidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
+             PreparedStatement ps = cn.prepareStatement(FIND)
         ) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
-                }
-            }
+            ResultSet it = ps.executeQuery();
+            candidates = addToPosts(it);
         } catch (Exception e) {
-            LOG.trace(e);
+            LOG.error(e.getMessage(), e);
+        }
+        return candidates;
+    }
+
+    private List<Candidate> addToPosts(ResultSet it) throws SQLException {
+        List<Candidate> candidates = new ArrayList<>();
+        while (it.next()) {
+            candidates.add(new Candidate(it.getInt("id"),
+                    it.getString("name"),
+                    it.getString("description"),
+                    it.getTimestamp("created").toLocalDateTime()));
         }
         return candidates;
     }
@@ -45,11 +56,12 @@ public class CandidateDbStore {
 
     public Candidate add(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?, ?)",
+             PreparedStatement ps = cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCity().getId());
+            ps.setString(2, candidate.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(candidate.getCreated()));
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -57,47 +69,43 @@ public class CandidateDbStore {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOG.trace(e);
+            LOG.error(e.getMessage(), e);
         }
         return candidate;
     }
 
     public void update(Candidate candidate) {
-        String sql = "UPDATE candidate SET name = (?),  city_id = (?) "
-                + "WHERE id =  (?)";
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+             PreparedStatement ps = cn.prepareStatement(UPDATE)) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCity().getId());
-            ps.setInt(3, candidate.getId());
+            ps.setString(2, candidate.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(candidate.getCreated()));
+            ps.setInt(4, candidate.getId());
             ps.executeUpdate();
         } catch (Exception e) {
-            LOG.trace(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
     public Candidate findById(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement(FIND_BY_ID);
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new Candidate(it.getInt("id"), it.getString("name"));
+                    return new Candidate(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getTimestamp("created").toLocalDateTime()
+                    );
                 }
             }
         } catch (Exception e) {
-            LOG.trace(e);
+            LOG.error(e.getMessage(), e);
         }
         return null;
-    }
-
-    public void wipeOut() throws SQLException {
-        try (Connection cn = pool.getConnection();
-             PreparedStatement statement = cn.prepareStatement("delete from candidate")) {
-            statement.execute();
-        }
     }
 
 }

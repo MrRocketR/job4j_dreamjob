@@ -8,9 +8,10 @@ public class Candidate {
     private int id;
     private String name;
     private String description;
+    private LocalDateTime created;
     private City city;
     private byte[] photo;
-    private LocalDateTime created;
+
 
     public Candidate() {
 
@@ -23,10 +24,9 @@ public class Candidate {
         this.created = created;
     }
 
-    public Candidate(int id, String name, City city) {
-        this.id = id;
+    public Candidate(String name, String description) {
         this.name = name;
-        this.city = city;
+        this.description = description;
     }
 
     public Candidate(int id, String name) {
