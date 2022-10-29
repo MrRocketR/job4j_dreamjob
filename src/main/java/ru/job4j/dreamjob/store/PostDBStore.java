@@ -4,8 +4,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
 import java.sql.*;
@@ -20,7 +18,7 @@ public class PostDBStore {
     private static final String ADD = "INSERT INTO post(name, description, created, city_id) VALUES (?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE post SET name = (?), description = (?),   city_id = (?),  "
             + "WHERE id =  (?)";
-    private static final String FINDBYID = "SELECT * FROM post WHERE id = ?";
+    private static final String FIND_BY_ID = "SELECT * FROM post WHERE id = ?";
 
     private static final Logger LOG = LogManager.getLogger(PostDBStore.class.getName());
     private final BasicDataSource pool;
@@ -30,28 +28,27 @@ public class PostDBStore {
     }
 
     public List<Post> findAll() {
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(FIND)
+             PreparedStatement ps = cn.prepareStatement(FIND);
         ) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    LocalDateTime localDateTime = it.getTimestamp("created").toLocalDateTime();
-                    Post post = new Post(it.getInt("id"),
-                            it.getString("name"), it.getString("description"),
-                            localDateTime, it.getInt("ciy_id"));
-                    posts = addToPosts(post);
-                }
-            }
+            ResultSet it = ps.executeQuery();
+            posts = addToPosts(it);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
         return posts;
     }
 
-    private List<Post> addToPosts(Post post) {
+
+    private List<Post> addToPosts(ResultSet it) throws SQLException {
         List<Post> posts = new ArrayList<>();
-        posts.add(post);
+        while (it.next()) {
+            posts.add(new Post(it.getInt("id"),
+                    it.getString("name"),
+                    it.getString("description"),
+                    it.getTimestamp("created").toLocalDateTime()));
+        }
         return posts;
     }
 
@@ -93,7 +90,7 @@ public class PostDBStore {
 
     public Post findById(int id) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(FINDBYID);
+             PreparedStatement ps = cn.prepareStatement(FIND_BY_ID);
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -106,13 +103,4 @@ public class PostDBStore {
         }
         return null;
     }
-
-
-    public void wipeOut() throws SQLException {
-        try (Connection cn = pool.getConnection();
-             PreparedStatement statement = cn.prepareStatement("TRUNCATE TABLE post")) {
-            statement.execute();
-        }
-    }
-
 }

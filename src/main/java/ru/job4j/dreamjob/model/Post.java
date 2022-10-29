@@ -12,7 +12,6 @@ public class Post implements Serializable {
     private LocalDateTime created;
     private boolean visible;
     private City city;
-    private int cityId;
 
     public Post() {
     }
@@ -22,27 +21,16 @@ public class Post implements Serializable {
         this.name = name;
         this.description = description;
         this.created = created;
-
     }
 
-    public Post(int id, String name, String description, LocalDateTime created, int cityId) {
-        this.id = id;
+    public Post(String name, String description) {
         this.name = name;
         this.description = description;
-        this.created = created;
-        this.cityId = cityId;
-    }
-
-    public Post(int id, String name, City city) {
-        this.id = id;
-        this.name = name;
-        this.city = city;
     }
 
     public Post(int id, String name) {
         this.id = id;
         this.name = name;
-
     }
 
     public int getId() {
@@ -61,12 +49,36 @@ public class Post implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
     public boolean isVisible() {
         return visible;
     }
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override
@@ -85,29 +97,4 @@ public class Post implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
 }
