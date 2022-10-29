@@ -18,7 +18,7 @@ import java.util.List;
 public class CandidateDbStore {
 
     private static final String FIND = "SELECT * FROM candidate";
-    private static final String ADD = "INSERT INTO post(name, description, created) VALUES(?, ?, ?)";
+    private static final String ADD = "INSERT INTO candidate(name, description, created) VALUES(?, ?, ?)";
     private static final String UPDATE = "UPDATE candidate SET name = ?, description = ?, created = ? where id = ?";
     private static final String FIND_BY_ID = "SELECT * FROM candidate WHERE id = ?";
     private static final Logger LOG = LogManager.getLogger(CandidateDbStore.class.getName());
