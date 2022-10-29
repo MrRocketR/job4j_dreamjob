@@ -4,10 +4,10 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.Post;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +15,8 @@ import java.util.List;
 @Service
 public class PostDBStore {
     private static final String FIND = "SELECT * FROM post";
-    private static final String ADD = "INSERT INTO post(name, description, created, city_id) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE post SET name = (?), description = (?),   city_id = (?),  "
-            + "WHERE id =  (?)";
+    private static final String ADD = "INSERT INTO post(name, description, created) VALUES(?, ?, ?)";
+    private static final String UPDATE = "UPDATE post SET name = ?, description = ?, created = ? where id = ?";
     private static final String FIND_BY_ID = "SELECT * FROM post WHERE id = ?";
 
     private static final Logger LOG = LogManager.getLogger(PostDBStore.class.getName());
@@ -28,7 +27,7 @@ public class PostDBStore {
     }
 
     public List<Post> findAll() {
-        List<Post> posts = null;
+        List<Post> posts =  new ArrayList<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND);
         ) {
@@ -54,15 +53,13 @@ public class PostDBStore {
 
 
     public Post add(Post post) {
-        Timestamp timestampSQL = Timestamp.valueOf(post.getCreated());
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
-            ps.setTimestamp(3, timestampSQL);
-            ps.setInt(4, post.getCity().getId());
+            ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -79,8 +76,8 @@ public class PostDBStore {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(UPDATE)) {
             ps.setString(1, post.getName());
-            ps.setString(2, post.getName());
-            ps.setInt(3, post.getCity().getId());
+            ps.setString(2, post.getDescription());
+            ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
             ps.setInt(4, post.getId());
             ps.executeUpdate();
         } catch (Exception e) {
@@ -95,7 +92,12 @@ public class PostDBStore {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new Post(it.getInt("id"), it.getString("name"));
+                    return new Post(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getTimestamp("created").toLocalDateTime()
+                    );
                 }
             }
         } catch (Exception e) {
