@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.Candidate;
-
+import ru.job4j.dreamjob.model.City;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -29,18 +29,22 @@ public class CandidateDbStoreTest {
     }
 
     @Test
-    public void whenCreatePost() {
-        Candidate candidate = new Candidate(0, "Ivan", "Junior", LocalDateTime.now());
+    public void whenCreateCandidate() {
+        Candidate candidate = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
+                new City(1, "Москва"), new byte[2]);
         store.add(candidate);
         Candidate candidateInDb = store.findById(candidate.getId());
         assertThat(candidateInDb.getName(), is(candidate.getName()));
     }
 
     @Test
-    public void whenFindThreePosts() {
-        Candidate candidate1 = new Candidate(0, "Ivan", "Junior", LocalDateTime.now());
-        Candidate candidate2 = new Candidate(0, "Maria", "Middle", LocalDateTime.now());
-        Candidate candidate3 = new Candidate(0, "Petr", "Senior", LocalDateTime.now());
+    public void whenFindThreeCandidate() {
+        Candidate candidate1 = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
+                new City(1, "Москва"), new byte[2]);
+        Candidate candidate2 = new Candidate(0, "Lisa Test", "Junior Test", LocalDateTime.now(),
+                new City(2, "СПБ"), new byte[2]);
+        Candidate candidate3 = new Candidate(0, "Maria Ivanov", "Junior Giga Java", LocalDateTime.now(),
+                new City(3, "ЕКБ"), new byte[2]);
         store.add(candidate1);
         store.add(candidate2);
         store.add(candidate3);
@@ -51,10 +55,11 @@ public class CandidateDbStoreTest {
 
     @Test
     public void whenUpdatePost() {
-        Candidate candidate = new Candidate(0, "Ivan", "Some text", LocalDateTime.now());
+        Candidate candidate = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
+                new City(1, "Москва"), new byte[2]);
         store.add(candidate);
-        store.update(new Candidate(candidate.getId(), candidate.getName(),
-                "Changed field", candidate.getCreated()));
+        store.update(new Candidate(candidate.getId(), candidate.getName(), "Changed field", candidate.getCreated(),
+                new City(1, "Москва"), new byte[2]));
         Candidate candidateInDb = store.findById(candidate.getId());
         assertThat(candidateInDb.getDescription(), is("Changed field"));
     }

@@ -9,7 +9,7 @@ public class Candidate {
     private String name;
     private String description;
     private LocalDateTime created;
-    private City city;
+    private City city =  new City(0, "Не указан");;
     private byte[] photo;
 
 
@@ -24,6 +24,8 @@ public class Candidate {
         this.created = created;
     }
 
+
+
     public Candidate(String name, String description) {
         this.name = name;
         this.description = description;
@@ -33,6 +35,15 @@ public class Candidate {
         this.id = id;
         this.name = name;
 
+    }
+
+    public Candidate(int id, String name, String description, LocalDateTime created, City city, byte[] photo) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.created = created;
+        this.city = city;
+        this.photo = photo;
     }
 
     @Override
