@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.store;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service
+@Repository
 public class PostDBStore {
     private static final String FIND = "SELECT * FROM post";
     private static final String ADD = "INSERT INTO post(name, description, created, city_id) VALUES(?, ?, ?, ?)";
