@@ -1,6 +1,6 @@
-CREATE TABLE if not exists candidate (
-   id SERIAL PRIMARY KEY,
-   name TEXT,
-   description TEXT,
-   created timestamp
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name text,
+  email varchar(255) unique,
+  password text
 );

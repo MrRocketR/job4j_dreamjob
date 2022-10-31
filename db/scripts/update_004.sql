@@ -1,1 +1,0 @@
- ALTER TABLE candidate ADD COLUMN  city_id int;
