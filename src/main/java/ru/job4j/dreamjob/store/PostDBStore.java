@@ -5,6 +5,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
 import java.sql.*;
@@ -86,23 +87,30 @@ public class PostDBStore {
     }
 
     public Post findById(int id) {
+        Post post = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND_BY_ID);
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                if (it.next()) {
-                    return new Post(
-                            it.getInt("id"),
-                            it.getString("name"),
-                            it.getString("description"),
-                            it.getTimestamp("created").toLocalDateTime()
-                    );
-                }
+                post = constructPost(it);
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
+        return post;
+    }
+
+    private Post constructPost(ResultSet it) throws SQLException {
+            if (it.next()) {
+                    return new Post(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("description"),
+                            it.getTimestamp("created").toLocalDateTime(),
+                            new City(it.getInt("city_id"), ""));
+            }
         return null;
     }
+
 }
