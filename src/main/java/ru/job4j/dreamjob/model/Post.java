@@ -11,7 +11,7 @@ public class Post implements Serializable {
     private String description;
     private LocalDateTime created;
     private boolean visible;
-    private City city = new City(0, "Не указан");
+    private City city;
 
     public Post() {
     }
