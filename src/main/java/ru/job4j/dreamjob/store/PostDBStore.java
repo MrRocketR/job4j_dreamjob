@@ -4,7 +4,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
@@ -16,8 +15,9 @@ import java.util.List;
 @Service
 public class PostDBStore {
     private static final String FIND = "SELECT * FROM post";
-    private static final String ADD = "INSERT INTO post(name, description, created) VALUES(?, ?, ?)";
-    private static final String UPDATE = "UPDATE post SET name = ?, description = ?, created = ? where id = ?";
+    private static final String ADD = "INSERT INTO post(name, description, created, city_id) VALUES(?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE post SET name = ?, description = ?, created = ?, city_id = ?"
+            + " where id = ?";
     private static final String FIND_BY_ID = "SELECT * FROM post WHERE id = ?";
 
     private static final Logger LOG = LogManager.getLogger(PostDBStore.class.getName());
@@ -28,7 +28,7 @@ public class PostDBStore {
     }
 
     public List<Post> findAll() {
-        List<Post> posts =  new ArrayList<>();
+        List<Post> posts = new ArrayList<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND);
         ) {
@@ -47,7 +47,8 @@ public class PostDBStore {
             posts.add(new Post(it.getInt("id"),
                     it.getString("name"),
                     it.getString("description"),
-                    it.getTimestamp("created").toLocalDateTime()));
+                    it.getTimestamp("created").toLocalDateTime(),
+                    new City(it.getInt("city_id"), "")));
         }
         return posts;
     }
@@ -61,6 +62,7 @@ public class PostDBStore {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
             ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
+            ps.setInt(4, post.getCity().getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -79,7 +81,8 @@ public class PostDBStore {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
             ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
-            ps.setInt(4, post.getId());
+            ps.setInt(4, post.getCity().getId());
+            ps.setInt(5, post.getId());
             ps.executeUpdate();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -102,14 +105,14 @@ public class PostDBStore {
     }
 
     private Post constructPost(ResultSet it) throws SQLException {
-            if (it.next()) {
-                    return new Post(
-                            it.getInt("id"),
-                            it.getString("name"),
-                            it.getString("description"),
-                            it.getTimestamp("created").toLocalDateTime(),
-                            new City(it.getInt("city_id"), ""));
-            }
+        if (it.next()) {
+            return new Post(
+                    it.getInt("id"),
+                    it.getString("name"),
+                    it.getString("description"),
+                    it.getTimestamp("created").toLocalDateTime(),
+                    new City(it.getInt("city_id"), ""));
+        }
         return null;
     }
 

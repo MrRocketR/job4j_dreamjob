@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.store;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.*;
 import ru.job4j.dreamjob.Main;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
 import java.sql.Connection;
@@ -27,7 +28,7 @@ public class PostDBStoreTest {
 
     @Test
     public void whenCreatePost() {
-        Post post = new Post(0, "Java Job", "Java", LocalDateTime.now());
+        Post post = new Post(0, "Java Job", "Java", LocalDateTime.now(), new City(1, "Москва"));
         store.add(post);
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb.getName(), is(post.getName()));
@@ -35,9 +36,12 @@ public class PostDBStoreTest {
 
     @Test
     public void whenFindThreePosts() {
-        Post post1 = new Post(0, "Java Job 1", "Java1", LocalDateTime.now());
-        Post post2 = new Post(0, "Java Job 2", "Java2", LocalDateTime.now());
-        Post post3 = new Post(0, "Java Job 3", "Java3", LocalDateTime.now());
+        Post post1 = new Post(0, "Java Job 1", "Java1",
+                LocalDateTime.now(), new City(1, "Москва"));
+        Post post2 = new Post(0, "Java Job 2", "Java2",
+                LocalDateTime.now(), new City(2, "СПБ"));
+        Post post3 = new Post(0, "Java Job 3", "Java3",
+                LocalDateTime.now(), new City(3, "ЕКБ"));
         store.add(post1);
         store.add(post2);
         store.add(post3);
@@ -48,9 +52,11 @@ public class PostDBStoreTest {
 
     @Test
     public void whenUpdatePost() {
-        Post post = new Post(0, "Java", "Some text", LocalDateTime.now());
+        Post post = new Post(0, "Java", "Some text",
+                LocalDateTime.now(), new City(1, "Москва"));
         store.add(post);
-        store.update(new Post(post.getId(), post.getName(), "Changed field", post.getCreated()));
+        store.update(new Post(post.getId(), post.getName(), "Changed field", post.getCreated(),
+                new City(1, "Москва")));
         Post postInDb = store.findById(post.getId());
         assertThat(postInDb.getDescription(), is("Changed field"));
     }
