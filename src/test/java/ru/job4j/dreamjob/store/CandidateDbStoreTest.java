@@ -1,13 +1,14 @@
 package ru.job4j.dreamjob.store;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,30 +16,39 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CandidateDbStoreTest {
-    private static CandidateDbStore store;
-    private static BasicDataSource pool;
 
-    @BeforeClass
-    public static void initConnection() {
-        pool = new Main().loadPool();
-        store = new CandidateDbStore(pool);
+
+    private static BasicDataSource pool = new Main().loadPool();
+
+    @AfterEach
+    public void wipeTable() throws SQLException {
+        Connection cn = pool.getConnection();
+        try (PreparedStatement statement = cn.prepareStatement("TRUNCATE TABLE candidate")) {
+            statement.execute();
+        }
     }
+    @AfterClass
+    public static void closeCnPool() throws SQLException {
+        pool.close();
+    }
+
 
     @Test
     public void whenCreateCandidate() {
+        CandidateDbStore store = new CandidateDbStore(pool);
         Candidate candidate = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
                 new City(1, "Москва"), new byte[2]);
         store.add(candidate);
         Candidate candidateInDb = store.findById(candidate.getId());
-        assertThat(candidateInDb.getName(), is(candidate.getName()));
+        assertThat(candidateInDb.getName()).isEqualTo(candidate.getName());
     }
 
     @Test
     public void whenFindThreeCandidate() {
+        CandidateDbStore store = new CandidateDbStore(pool);
         Candidate candidate1 = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
                 new City(1, "Москва"), new byte[2]);
         Candidate candidate2 = new Candidate(0, "Lisa Test", "Junior Test", LocalDateTime.now(),
@@ -55,22 +65,17 @@ public class CandidateDbStoreTest {
 
     @Test
     public void whenUpdatePost() {
+        CandidateDbStore store = new CandidateDbStore(pool);
         Candidate candidate = new Candidate(0, "Ivan Ivanov", "Junior Java", LocalDateTime.now(),
                 new City(1, "Москва"), new byte[2]);
         store.add(candidate);
         store.update(new Candidate(candidate.getId(), candidate.getName(), "Changed field", candidate.getCreated(),
                 new City(1, "Москва"), new byte[2]));
         Candidate candidateInDb = store.findById(candidate.getId());
-        assertThat(candidateInDb.getDescription(), is("Changed field"));
+        assertThat(candidateInDb.getDescription()).isEqualTo("Changed field");
     }
 
 
-    @After
-    public void wipeTable() throws SQLException {
-        Connection cn = pool.getConnection();
-        try (PreparedStatement statement = cn.prepareStatement("TRUNCATE TABLE candidate")) {
-            statement.execute();
-        }
-    }
+
 
 }
