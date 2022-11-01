@@ -1,11 +1,13 @@
 package ru.job4j.dreamjob.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.job4j.dreamjob.Main;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
