@@ -96,7 +96,7 @@ public class PostDBStore {
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                if(it.next()) {
+                if (it.next()) {
                     post = getPost(it);
                 }
             }
