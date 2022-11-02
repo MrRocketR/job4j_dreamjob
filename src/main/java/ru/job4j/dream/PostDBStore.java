@@ -105,15 +105,12 @@ public class PostDBStore {
     }
 
     private Post constructPost(ResultSet it) throws SQLException {
-        if (it.next()) {
             return new Post(
                     it.getInt("id"),
                     it.getString("name"),
                     it.getString("description"),
                     it.getTimestamp("created").toLocalDateTime(),
                     new City(it.getInt("city_id"), ""));
-        }
-        return null;
     }
 
 }
