@@ -2,6 +2,7 @@ package ru.job4j.dream.service;
 
 import net.jcip.annotations.ThreadSafe;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Service;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.PostDBStore;
@@ -35,6 +36,7 @@ public class PostService {
     public void add(Post post) {
         store.add(post);
     }
+
     public Post findById(int id) {
         return store.findById(id);
     }
@@ -42,6 +44,4 @@ public class PostService {
     public void update(Post post) {
         store.update(post);
     }
-
-
 }
