@@ -96,7 +96,9 @@ public class PostDBStore {
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                post = constructPost(it);
+                if(it.next()) {
+                    post = getPost(it);
+                }
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -104,7 +106,7 @@ public class PostDBStore {
         return post;
     }
 
-    private Post constructPost(ResultSet it) throws SQLException {
+    private Post getPost(ResultSet it) throws SQLException {
             return new Post(
                     it.getInt("id"),
                     it.getString("name"),

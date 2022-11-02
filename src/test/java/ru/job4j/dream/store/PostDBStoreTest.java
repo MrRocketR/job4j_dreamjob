@@ -41,8 +41,8 @@ public class PostDBStoreTest {
         PostDBStore store = new PostDBStore(pool);
         Post post = new Post(0, "Java Job", "Java", LocalDateTime.now(), new City(1, "Москва"));
         store.add(post);
-        Post postInDb = store.findById(post.getId());
-        assertThat(postInDb.getName()).isEqualTo(post.getName());
+         Post postInDb = store.findById(post.getId());
+         assertThat(postInDb.getName()).isEqualTo(post.getName());
     }
 
     @Test
