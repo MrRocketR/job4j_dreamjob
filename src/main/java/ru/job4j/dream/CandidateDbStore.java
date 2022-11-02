@@ -101,7 +101,9 @@ public class CandidateDbStore {
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                candidate = constructPost(it);
+                if (it.next()) {
+                    candidate = constructPost(it);
+                }
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -111,7 +113,6 @@ public class CandidateDbStore {
 
 
     private Candidate constructPost(ResultSet it) throws SQLException {
-        if (it.next()) {
             return new Candidate(
                     it.getInt("id"),
                     it.getString("name"),
@@ -119,8 +120,6 @@ public class CandidateDbStore {
                     it.getTimestamp("created").toLocalDateTime(),
                     new City(it.getInt("city_id"), ""),
                     it.getBytes("photo"));
-        }
-        return null;
     }
 
 }
