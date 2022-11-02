@@ -20,17 +20,17 @@ import java.io.IOException;
 @ThreadSafe
 public class CandidateController {
 
-    private final CandidateService service;
+    private final CandidateService candidateService;
     private final CityService cityService;
 
     public CandidateController(CandidateService service, CityService cityService) {
-        this.service = service;
+        this.candidateService = service;
         this.cityService = cityService;
     }
 
     @GetMapping("/candidates")
     public String candidates(Model model) {
-        model.addAttribute("candidates", service.findAll());
+        model.addAttribute("candidates", candidateService.findAll());
         return "candidates";
     }
 
@@ -45,13 +45,13 @@ public class CandidateController {
                                   @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setCity(cityService.findById(id));
         candidate.setPhoto(file.getBytes());
-        service.add(candidate);
+        candidateService.add(candidate);
         return "redirect:/candidates";
     }
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
     public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
-        model.addAttribute("candidate", service.findById(id));
+        model.addAttribute("candidate", candidateService.findById(id));
         model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
     }
@@ -60,14 +60,14 @@ public class CandidateController {
                                   @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setCity(cityService.findById(id));
         candidate.setPhoto(file.getBytes());
-        service.update(candidate);
+        candidateService.update(candidate);
         return "redirect:/candidates";
     }
 
 
     @GetMapping("/photoCandidate/{candidateId}")
     public ResponseEntity<Resource> download(@PathVariable("candidateId") Integer candidateId) {
-        Candidate candidate = service.findById(candidateId);
+        Candidate candidate = candidateService.findById(candidateId);
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())
                 .contentLength(candidate.getPhoto().length)
