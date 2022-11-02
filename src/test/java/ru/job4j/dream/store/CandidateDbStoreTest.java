@@ -26,7 +26,7 @@ public class CandidateDbStoreTest {
     @AfterEach
     public void wipeTable() throws SQLException {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("DELETE FROM CANDIDATE")
+             PreparedStatement ps = cn.prepareStatement("TRUNCATE Table CANDIDATE")
         ) {
             ps.execute();
         }
