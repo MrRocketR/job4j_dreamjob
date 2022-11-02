@@ -1,6 +1,8 @@
-package ru.job4j.dream;
+package ru.job4j.dream.store;
 
 
+import ru.job4j.dream.CandidateDbStore;
+import ru.job4j.dream.Main;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.City;
 import org.apache.commons.dbcp2.BasicDataSource;
