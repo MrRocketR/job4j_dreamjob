@@ -8,8 +8,7 @@ import ru.job4j.dreamjob.store.CandidateStore;
 
 import java.util.Collection;
 
-@Service
-@ThreadSafe
+
 public class CandidateServiceOld {
     private final CandidateStore store;
     private final CityService cityService;

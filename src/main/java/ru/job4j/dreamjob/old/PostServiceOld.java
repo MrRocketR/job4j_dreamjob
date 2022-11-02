@@ -8,8 +8,7 @@ import ru.job4j.dreamjob.store.PostStore;
 
 import java.util.Collection;
 
-@Service
-@ThreadSafe
+
 public class PostServiceOld {
 
     private final PostStore store;
