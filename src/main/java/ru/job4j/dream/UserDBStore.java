@@ -6,10 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import ru.job4j.dream.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Optional;
 
 
@@ -46,8 +43,8 @@ public class UserDBStore {
         return result;
     }
 
-    public Optional<User> findUserByEmailAndPassword(String email, String password) {
-        Optional<User> result = Optional.empty();
+    public User findUserByEmailAndPassword(String email, String password) {
+       User user = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND)
         ) {
@@ -55,18 +52,21 @@ public class UserDBStore {
             ps.setString(2, password);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
-                    User user = new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password")
-                    );
-                    return Optional.of(user);
+                    user = getUser(resultSet);
                 }
             }
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return result;
+        return user;
+    }
+
+    public User getUser(ResultSet resultSet) throws SQLException {
+        return new User(
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getString("email"),
+                resultSet.getString("password")
+        );
     }
 }
