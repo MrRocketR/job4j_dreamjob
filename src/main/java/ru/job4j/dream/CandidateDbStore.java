@@ -1,4 +1,4 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream;
 
 
 import org.apache.commons.dbcp2.BasicDataSource;

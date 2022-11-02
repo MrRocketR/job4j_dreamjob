@@ -1,8 +1,7 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream;
 
 
 import org.junit.Assert;
-import ru.job4j.dream.Main;
 import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import org.apache.commons.dbcp2.BasicDataSource;

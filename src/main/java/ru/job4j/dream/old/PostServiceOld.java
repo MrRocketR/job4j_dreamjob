@@ -2,7 +2,7 @@ package ru.job4j.dream.old;
 
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.service.CityService;
-import ru.job4j.dream.store.PostStore;
+import ru.job4j.dream.PostStore;
 
 import java.util.Collection;
 

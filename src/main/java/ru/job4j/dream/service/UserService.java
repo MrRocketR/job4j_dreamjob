@@ -3,7 +3,7 @@ package ru.job4j.dream.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.dream.model.User;
-import ru.job4j.dream.store.UserDBStore;
+import ru.job4j.dream.UserDBStore;
 
 import java.util.Optional;
 

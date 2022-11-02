@@ -1,4 +1,4 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
