@@ -23,7 +23,6 @@ public class UserDBStore {
     }
 
     public Optional<User> add(User user) {
-        Optional<User> result = Optional.empty();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(ADD, Statement.RETURN_GENERATED_KEYS)
         ) {
@@ -40,11 +39,10 @@ public class UserDBStore {
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return result;
+        return Optional.empty();
     }
 
-    public User findUserByEmailAndPassword(String email, String password) {
-       User user = null;
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND)
         ) {
@@ -52,13 +50,14 @@ public class UserDBStore {
             ps.setString(2, password);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
-                    user = getUser(resultSet);
+                    User user = getUser(resultSet);
+                    return Optional.of(user);
                 }
             }
         } catch (Exception e) {
             LOG.error("Exception", e);
         }
-        return user;
+        return Optional.empty();
     }
 
     public User getUser(ResultSet resultSet) throws SQLException {

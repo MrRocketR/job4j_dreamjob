@@ -3,6 +3,7 @@ package ru.job4j.dream.store;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.job4j.dream.Main;
 import ru.job4j.dream.repository.UserDBStore;
@@ -11,8 +12,7 @@ import ru.job4j.dream.model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Optional;
 
 public class UserDBStoreTest {
 
@@ -37,8 +37,18 @@ public class UserDBStoreTest {
         User user = new User(0, "Tester", "tester@gmail.com", "qwerty");
         UserDBStore store = new UserDBStore(pool);
         store.add(user);
-        User userInDb = store.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
-        assertThat(userInDb.getEmail().equals(user.getEmail()));
+        User userInDb = store.findUserByEmailAndPassword(user.getEmail(), user.getPassword()).get();
+        Assertions.assertEquals(userInDb.getEmail(), user.getEmail());
+    }
+
+    @Test
+    public void whenUserAlreadySame() {
+        User user = new User(0, "Tester", "tester@gmail.com", "qwerty");
+        User user2 = new User(0, "Tester", "tester@gmail.com", "qwerty");
+        UserDBStore store = new UserDBStore(pool);
+        store.add(user);
+        Optional<User> userInDb = store.add(user2);
+        Assertions.assertTrue(userInDb.isEmpty());
     }
 
 }

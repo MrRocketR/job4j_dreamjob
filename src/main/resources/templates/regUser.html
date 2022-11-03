@@ -49,6 +49,9 @@
                         <label for="password">Пароль</label>
                         <input type="text" name="password" id = "password" />
                     </div>
+                    <div th:if="${fail}" class="alert alert-danger" role="alert">
+                        Пользователь с таким именем уже существует!
+                    </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>
