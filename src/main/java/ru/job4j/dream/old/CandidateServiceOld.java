@@ -2,7 +2,7 @@ package ru.job4j.dream.old;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.service.CityService;
-import ru.job4j.dream.CandidateStore;
+import ru.job4j.dream.repository.CandidateStore;
 
 import java.util.Collection;
 

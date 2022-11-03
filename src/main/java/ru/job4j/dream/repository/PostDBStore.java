@@ -1,4 +1,4 @@
-package ru.job4j.dream;
+package ru.job4j.dream.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
@@ -33,22 +33,13 @@ public class PostDBStore {
              PreparedStatement ps = cn.prepareStatement(FIND);
         ) {
             ResultSet it = ps.executeQuery();
-            posts = addToPosts(it);
+            while (it.next()) {
+                Post post = getPost(it);
+                posts.add(post);
+            }
+
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
-        }
-        return posts;
-    }
-
-
-    private List<Post> addToPosts(ResultSet it) throws SQLException {
-        List<Post> posts = new ArrayList<>();
-        while (it.next()) {
-            posts.add(new Post(it.getInt("id"),
-                    it.getString("name"),
-                    it.getString("description"),
-                    it.getTimestamp("created").toLocalDateTime(),
-                    new City(it.getInt("city_id"), "")));
         }
         return posts;
     }

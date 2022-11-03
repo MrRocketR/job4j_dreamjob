@@ -5,13 +5,12 @@ import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import ru.job4j.dream.Main;
-import ru.job4j.dream.UserDBStore;
+import ru.job4j.dream.repository.UserDBStore;
 import ru.job4j.dream.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

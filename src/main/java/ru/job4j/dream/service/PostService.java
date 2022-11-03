@@ -2,10 +2,9 @@ package ru.job4j.dream.service;
 
 import net.jcip.annotations.ThreadSafe;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Service;
 import ru.job4j.dream.model.Post;
-import ru.job4j.dream.PostDBStore;
+import ru.job4j.dream.repository.PostDBStore;
 
 import java.util.Collection;
 
