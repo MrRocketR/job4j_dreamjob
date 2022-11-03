@@ -25,7 +25,7 @@ public class CandidateService {
                         cityService.findById(candidate.getCity().getId())
                 )
         );
-        return store.findAll();
+        return posts;
     }
 
     public void add(Candidate candidate) {
