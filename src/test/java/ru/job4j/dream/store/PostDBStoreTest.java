@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import ru.job4j.dream.Main;
 import ru.job4j.dream.repository.PostDBStore;
 import ru.job4j.dream.model.City;
@@ -59,7 +60,7 @@ public class PostDBStoreTest {
         store.add(post3);
         List<Post> posts = store.findAll();
         List<Post> expected = Arrays.asList(post1, post2, post3);
-        Assert.assertEquals(posts, expected);
+        Assertions.assertEquals(posts, expected);
     }
 
     @Test
