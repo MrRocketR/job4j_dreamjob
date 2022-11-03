@@ -36,26 +36,15 @@ public class CandidateDbStore {
              PreparedStatement ps = cn.prepareStatement(FIND)
         ) {
             ResultSet it = ps.executeQuery();
-            candidates = addToPosts(it);
+            while (it.next()) {
+                Candidate candidate = getCandidate(it);
+                candidates.add(candidate);
+            }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
         return candidates;
     }
-
-    private List<Candidate> addToPosts(ResultSet it) throws SQLException {
-        List<Candidate> candidates = new ArrayList<>();
-        while (it.next()) {
-            candidates.add(new Candidate(it.getInt("id"),
-                    it.getString("name"),
-                    it.getString("description"),
-                    it.getTimestamp("created").toLocalDateTime(),
-                    new City(it.getInt("city_id"), ""),
-                    it.getBytes("photo")));
-        }
-        return candidates;
-    }
-
 
     public Candidate add(Candidate candidate) {
         try (Connection cn = pool.getConnection();
@@ -102,7 +91,7 @@ public class CandidateDbStore {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    candidate = constructPost(it);
+                    candidate = getCandidate(it);
                 }
             }
         } catch (Exception e) {
@@ -112,7 +101,7 @@ public class CandidateDbStore {
     }
 
 
-    private Candidate constructPost(ResultSet it) throws SQLException {
+    private Candidate getCandidate(ResultSet it) throws SQLException {
             return new Candidate(
                     it.getInt("id"),
                     it.getString("name"),
