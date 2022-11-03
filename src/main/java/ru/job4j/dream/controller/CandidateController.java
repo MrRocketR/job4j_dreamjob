@@ -11,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.User;
 import ru.job4j.dream.service.CandidateService;
 import ru.job4j.dream.service.CityService;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
@@ -29,14 +31,26 @@ public class CandidateController {
     }
 
     @GetMapping("/candidates")
-    public String candidates(Model model) {
+    public String candidates(Model model,  HttpSession session) {
         model.addAttribute("candidates", candidateService.findAll());
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "candidates";
     }
 
     @GetMapping("/addCandidate")
-    public String addCandidate(Model model) {
+    public String addCandidate(Model model,  HttpSession session) {
         model.addAttribute("cities", cityService.getAllCities());
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "addCandidate";
     }
 
@@ -57,10 +71,17 @@ public class CandidateController {
     }
     @PostMapping("/updateCandidate")
     public String updateCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id,
-                                  @RequestParam("file") MultipartFile file) throws IOException {
+                                  @RequestParam("file") MultipartFile file,
+                                  HttpSession session, Model model) throws IOException {
         candidate.setCity(cityService.findById(id));
         candidate.setPhoto(file.getBytes());
         candidateService.update(candidate);
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "redirect:/candidates";
     }
 
