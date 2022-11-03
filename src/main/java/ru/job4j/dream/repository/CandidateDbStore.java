@@ -9,6 +9,7 @@ import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.City;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class CandidateDbStore {
         ) {
             ps.setString(1, candidate.getName());
             ps.setString(2, candidate.getDescription());
+            candidate.setCreated(LocalDateTime.now());
             ps.setTimestamp(3, Timestamp.valueOf(candidate.getCreated()));
             ps.setInt(4, candidate.getCity().getId());
             ps.setBytes(5, candidate.getPhoto());

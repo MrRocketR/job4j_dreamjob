@@ -8,6 +8,7 @@ import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class PostDBStore {
         ) {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
+            post.setCreated(LocalDateTime.now());
             ps.setTimestamp(3, Timestamp.valueOf(post.getCreated()));
             ps.setInt(4, post.getCity().getId());
             ps.execute();
