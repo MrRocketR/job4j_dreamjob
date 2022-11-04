@@ -1,10 +1,8 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream.repository;
 
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import ru.job4j.dream.Main;
-import ru.job4j.dream.repository.PostDBStore;
 import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import org.apache.commons.dbcp2.BasicDataSource;

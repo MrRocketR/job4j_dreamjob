@@ -1,7 +1,6 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream.repository;
 
 
-import ru.job4j.dream.repository.CandidateDbStore;
 import ru.job4j.dream.Main;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.City;

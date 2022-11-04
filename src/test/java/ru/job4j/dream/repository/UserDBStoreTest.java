@@ -1,4 +1,4 @@
-package ru.job4j.dream.store;
+package ru.job4j.dream.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.AfterClass;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.job4j.dream.Main;
-import ru.job4j.dream.repository.UserDBStore;
 import ru.job4j.dream.model.User;
 
 import java.sql.Connection;
