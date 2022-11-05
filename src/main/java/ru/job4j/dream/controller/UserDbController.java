@@ -26,11 +26,7 @@ public class UserDbController {
     public String regUser(Model model, @RequestParam(name = "fail", required = false) Boolean fail,
                           HttpSession session) {
         model.addAttribute("fail", fail != null);
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
-        }
+        User user = SessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "regUser";
     }
