@@ -91,7 +91,8 @@ public class PostControllerTest {
         when(postService.findById(postId)).thenReturn(post);
         when(cityService.getAllCities()).thenReturn(cities);
         PostController postController = new PostController(postService, cityService);
-        String page = postController.formUpdatePost(model, postId);
+        HttpSession httpSession = new MockHttpSession();
+        String page = postController.formUpdatePost(model, postId, httpSession);
         verify(model).addAttribute("user", user);
         verify(model).addAttribute("post", post);
         verify(model).addAttribute("cities", cities);
@@ -116,7 +117,7 @@ public class PostControllerTest {
         doNothing().when(postService).update(isA(Post.class));
         postService.update(updPost);
         HttpSession httpSession = new MockHttpSession();
-        String page = postController.updatePost(updPost, updId, httpSession, model);
+        String page = postController.updatePost(updPost, updId);
         verify(cityService).findById(city.getId());
         verify(postService, times(2)).update(updPost);
         Assertions.assertEquals(page, "redirect:/posts");
