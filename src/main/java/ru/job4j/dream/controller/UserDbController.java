@@ -16,19 +16,15 @@ import java.util.Optional;
 @Controller
 public class UserDbController {
 
-   private final UserService userService;
+    private final UserService userService;
 
     public UserDbController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/regUser")
-    public String regUser(Model model, @RequestParam(name = "fail", required = false) Boolean fail,
-                          HttpSession session) {
+    public String regUser(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
         return "regUser";
     }
 
@@ -48,17 +44,15 @@ public class UserDbController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute User user, HttpServletRequest req) {
+    public String login(@ModelAttribute User user, HttpServletRequest request) {
         Optional<User> userDb = userService.findUserByEmailAndPassword(
                 user.getEmail(), user.getPassword()
         );
         if (userDb.isEmpty()) {
             return "redirect:/loginPage?fail=true";
         }
-        HttpSession session = req.getSession();
+        HttpSession session = request.getSession();
         session.setAttribute("user", userDb.get());
         return "redirect:/index";
     }
-
-
 }

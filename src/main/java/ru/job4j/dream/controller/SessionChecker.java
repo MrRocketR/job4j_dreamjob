@@ -1,5 +1,6 @@
 package ru.job4j.dream.controller;
 
+import org.springframework.ui.Model;
 import ru.job4j.dream.model.User;
 
 import javax.servlet.http.HttpSession;
@@ -15,12 +16,13 @@ public class SessionChecker {
 
         return instance;
     }
-    public User getUserToModel(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public void checkSession(Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
         if (user == null) {
             user = new User();
             user.setName("Гость");
         }
-       return user;
+        model.addAttribute("user", user);
     }
+
 }

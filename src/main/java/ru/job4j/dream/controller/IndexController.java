@@ -9,15 +9,12 @@ import ru.job4j.dream.model.User;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@ThreadSafe
-public class IndexControl {
-
+public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model, HttpSession session) {
         SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
+        sessionChecker.checkSession(model, session);
         return "index";
     }
 

@@ -23,59 +23,49 @@ import java.io.IOException;
 public class CandidateController {
 
     private final CandidateService candidateService;
-    private final CityService cityService;
 
-    public CandidateController(CandidateService service, CityService cityService) {
-        this.candidateService = service;
-        this.cityService = cityService;
+    public CandidateController(CandidateService candidateService) {
+        this.candidateService = candidateService;
     }
 
     @GetMapping("/candidates")
-    public String candidates(Model model,  HttpSession session) {
-        model.addAttribute("candidates", candidateService.findAll());
+    public String candidates(Model model, HttpSession session) {
         SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
+        sessionChecker.checkSession(model, session);
+        model.addAttribute("candidates", candidateService.findAll());
         return "candidates";
     }
 
     @GetMapping("/addCandidate")
-    public String addCandidate(Model model,  HttpSession session) {
-        model.addAttribute("cities", cityService.getAllCities());
+    public String addCandidate(Model model, HttpSession session) {
         SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
+        sessionChecker.checkSession(model, session);
         return "addCandidate";
     }
 
     @PostMapping("/createCandidate")
-    public String createCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id,
+    public String createCandidate(@ModelAttribute Candidate candidate,
                                   @RequestParam("file") MultipartFile file) throws IOException {
-        candidate.setCity(cityService.findById(id));
         candidate.setPhoto(file.getBytes());
         candidateService.add(candidate);
         return "redirect:/candidates";
     }
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
-    public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
+    public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id, HttpSession session) {
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        sessionChecker.checkSession(model, session);
         model.addAttribute("candidate", candidateService.findById(id));
-        model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
     }
+
     @PostMapping("/updateCandidate")
-    public String updateCandidate(@ModelAttribute Candidate candidate, @RequestParam("city.id") int id,
-                                  @RequestParam("file") MultipartFile file,
-                                  HttpSession session, Model model) throws IOException {
-        candidate.setCity(cityService.findById(id));
+    public String updatePost(@ModelAttribute Candidate candidate,
+                             @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setPhoto(file.getBytes());
         candidateService.update(candidate);
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
         return "redirect:/candidates";
     }
-
 
     @GetMapping("/photoCandidate/{candidateId}")
     public ResponseEntity<Resource> download(@PathVariable("candidateId") Integer candidateId) {

@@ -10,7 +10,6 @@ import ru.job4j.dream.service.CityService;
 import ru.job4j.dream.service.PostService;
 
 import javax.servlet.http.HttpSession;
-
 @Controller
 @ThreadSafe
 public class PostController {
@@ -18,18 +17,16 @@ public class PostController {
     private final PostService postService;
     private final CityService cityService;
 
-
-    public PostController(PostService service, CityService cityService) {
-        this.postService = service;
+    public PostController(PostService postService, CityService cityService) {
+        this.postService = postService;
         this.cityService = cityService;
     }
 
     @GetMapping("/posts")
     public String posts(Model model, HttpSession session) {
-        model.addAttribute("posts", postService.findAll());
         SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
+        sessionChecker.checkSession(model, session);
+        model.addAttribute("posts", postService.findAll());
         return "posts";
     }
 
@@ -40,33 +37,28 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @GetMapping ("/addPost")
+    public String addPost(Model model, HttpSession session) {
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        sessionChecker.checkSession(model, session);
+        model.addAttribute("cities", cityService.getAllCities());
+        return "addPost";
+    }
+
     @GetMapping("/formUpdatePost/{postId}")
-    public String formUpdatePost(Model model, @PathVariable("postId") int id) {
+    public String formUpdatePost(Model model, @PathVariable("postId") int id, HttpSession session) {
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        sessionChecker.checkSession(model, session);
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("cities", cityService.getAllCities());
         return "updatePost";
     }
 
-    @GetMapping("/addPost")
-    public String addPost(Model model, HttpSession session) {
-        model.addAttribute("cities", cityService.getAllCities());
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
-        return "addPost";
-    }
-
-
     @PostMapping("/updatePost")
-    public String updatePost(@ModelAttribute Post post, @RequestParam("city.id") int id,
-                             HttpSession session, Model model) {
+    public String updatePost(@ModelAttribute Post post, @RequestParam("city.id") int id) {
         post.setCity(cityService.findById(id));
         postService.update(post);
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        User user = sessionChecker.getUserToModel(session);
-        model.addAttribute("user", user);
         return "redirect:/posts";
     }
-
 
 }
