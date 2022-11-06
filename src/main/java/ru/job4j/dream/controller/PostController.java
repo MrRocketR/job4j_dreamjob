@@ -27,7 +27,8 @@ public class PostController {
     @GetMapping("/posts")
     public String posts(Model model, HttpSession session) {
         model.addAttribute("posts", postService.findAll());
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "posts";
     }
@@ -49,7 +50,8 @@ public class PostController {
     @GetMapping("/addPost")
     public String addPost(Model model, HttpSession session) {
         model.addAttribute("cities", cityService.getAllCities());
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "addPost";
     }
@@ -60,7 +62,8 @@ public class PostController {
                              HttpSession session, Model model) {
         post.setCity(cityService.findById(id));
         postService.update(post);
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "redirect:/posts";
     }

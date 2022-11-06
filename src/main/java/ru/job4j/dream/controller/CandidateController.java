@@ -33,7 +33,8 @@ public class CandidateController {
     @GetMapping("/candidates")
     public String candidates(Model model,  HttpSession session) {
         model.addAttribute("candidates", candidateService.findAll());
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "candidates";
     }
@@ -41,7 +42,8 @@ public class CandidateController {
     @GetMapping("/addCandidate")
     public String addCandidate(Model model,  HttpSession session) {
         model.addAttribute("cities", cityService.getAllCities());
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "addCandidate";
     }
@@ -68,7 +70,8 @@ public class CandidateController {
         candidate.setCity(cityService.findById(id));
         candidate.setPhoto(file.getBytes());
         candidateService.update(candidate);
-        User user = SessionChecker.getUserToModel(session);
+        SessionChecker sessionChecker = SessionChecker.getInstance();
+        User user = sessionChecker.getUserToModel(session);
         model.addAttribute("user", user);
         return "redirect:/candidates";
     }

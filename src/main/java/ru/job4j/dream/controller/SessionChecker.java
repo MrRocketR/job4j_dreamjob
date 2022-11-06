@@ -6,7 +6,16 @@ import javax.servlet.http.HttpSession;
 
 public class SessionChecker {
 
-    public static User getUserToModel(HttpSession session) {
+    private static SessionChecker instance;
+
+    public static SessionChecker getInstance() {
+        if (instance == null) {
+            instance = new SessionChecker();
+        }
+
+        return instance;
+    }
+    public User getUserToModel(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             user = new User();
