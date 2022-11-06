@@ -83,7 +83,7 @@ To run the application you need:
 
 1. Create a database named dreamjob
 ```ql
-    create database cinema;
+    create database dreamjob;
 ```
 
 2. Build the project and run the Spring Boot application
