@@ -6,7 +6,7 @@
 - Spring boot 2.5.2
 - Thymeleaf,
 - Bootstrap,
-- JDBC(PostgreSql).
+- PostgreSQL 42.2.9
 - Junit 4.13.2
 - AssertJ 3.23.1
 - log4j 1.2.17
@@ -24,20 +24,45 @@
 - PostgreSQL 14
 
 Для запуска приложения необходимо:
-Создать базу данных с именем dreamjob и запустить команду mvn spring-boot:run
+
+1. Создать базу данных с именем dreamjob
+```sql
+    create database cinema;
+```
+
+2. Собрать проект и запустить приложение Spring Boot
+```
+    mvn clean install
+    mvn spring-boot:run
+```
+
+### Страницы с авторизацией и аутентификацией пользователя:
+![](img/login.png)
+![](img/reg.png)
+
+### Основная страница со списком вакансий и кандидатами:
+![](img/posts.png)
+![](img/candidates.png)
+
+### Страницы добавления и редактирования:
+![](img/AddPosts.png)
+![](img/AddCandidates.png)
+![](img/UpdatePosts.png)
+![](img/UpdateCandidates.png)
+
 
 По всем вопросам по данному проекту вы можете написать мне на email kuptsovns@gmail.com
 
 
 <h1>job4j_dreamjob</h1>
-Dream Job is a training project, representing a job and candidate search service. The project was developed using the Spring Boot technology.
+Dream Job is a educational project, representing a job and candidate search service. The project was developed using the Spring Boot technology.
 Upon request for any page, the current session is filtered through java.servlet.Filter and the user is redirected to the authorization page. Only the authorized user can create/edit jobs and candidates. All entries are saved in the database.  
 
 Technologies used in the project: 
 - Spring boot 2.5.2
 - Thymeleaf, 
 - Bootstrap, 
-- JDBC(PostgreSql). 
+- PostgreSQL 42.2.9
 - Junit 4.13.2
 - AssertJ 3.23.1
 - log4j 1.2.17
@@ -54,7 +79,33 @@ Required environment:
 - Maven 3.8
 - PostgreSQL 14
 
-To run the application you need to:
-Create a database under the name dreamjob and run the command mvn spring-boot:run
+To run the application you need:
+
+1. Create a database named dreamjob
+```ql
+    create database cinema;
+```
+
+2. Build the project and run the Spring Boot application
+```
+    mvn clean install
+    mvn spring-boot:run
+```
+
+### Pages with user authorization and authentication:
+![](img/login.png)
+![](img/reg.png)
+
+#### Main page with job listings and candidates:
+![](img/posts.png)
+![](img/candidates.png)
+
+#### Add and edit pages:
+![](img/AddPosts.png)
+![](img/AddCandidates.png)
+![](img/UpdatePosts.png)
+![](img/UpdateCandidates.png)
+
 
 If you have any questions about this project you can email me at kuptsovns@gmail.com
+
