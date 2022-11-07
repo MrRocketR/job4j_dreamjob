@@ -11,8 +11,7 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         return "index";
     }
 

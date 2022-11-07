@@ -23,8 +23,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public String posts(Model model, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("posts", postService.findAll());
         return "posts";
     }
@@ -38,16 +37,14 @@ public class PostController {
 
     @GetMapping ("/addPost")
     public String addPost(Model model, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("cities", cityService.getAllCities());
         return "addPost";
     }
 
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("cities", cityService.getAllCities());
         return "updatePost";

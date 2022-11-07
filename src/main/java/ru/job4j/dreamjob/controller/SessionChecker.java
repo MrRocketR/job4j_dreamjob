@@ -5,18 +5,13 @@ import ru.job4j.dreamjob.model.User;
 
 import javax.servlet.http.HttpSession;
 
-public class SessionChecker {
+public final class SessionChecker {
 
-    private static SessionChecker instance;
+    private SessionChecker() {
 
-    public static SessionChecker getInstance() {
-        if (instance == null) {
-            instance = new SessionChecker();
-        }
-
-        return instance;
     }
-    public void checkSession(Model model, HttpSession httpSession) {
+
+    public static void checkSession(Model model, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
         if (user == null) {
             user = new User();

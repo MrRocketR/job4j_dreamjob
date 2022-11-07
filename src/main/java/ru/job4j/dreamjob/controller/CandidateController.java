@@ -31,16 +31,14 @@ public class CandidateController {
 
     @GetMapping("/candidates")
     public String candidates(Model model, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("candidates", candidateService.findAll());
         return "candidates";
     }
 
     @GetMapping("/addCandidate")
     public String addCandidate(Model model, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("cities", cityService.getAllCities());
         return "addCandidate";
     }
@@ -56,8 +54,7 @@ public class CandidateController {
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
     public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id, HttpSession session) {
-        SessionChecker sessionChecker = SessionChecker.getInstance();
-        sessionChecker.checkSession(model, session);
+        SessionChecker.checkSession(model, session);
         model.addAttribute("candidate", candidateService.findById(id));
         model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
