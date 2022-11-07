@@ -2,7 +2,6 @@ package ru.job4j.dreamjob.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import ru.job4j.Main;
@@ -43,7 +42,6 @@ public class CandidateDbStoreTest {
                 new City(1, "Москва"), new byte[2]);
         store.add(candidate);
         Candidate candidateInDb = store.findById(candidate.getId());
-        //assertThat(candidateInDb.getName().isEqual(candidate.getName());
     }
 
     @Test
@@ -60,7 +58,6 @@ public class CandidateDbStoreTest {
         store.add(candidate3);
         List<Candidate> candidates = store.findAll();
         List<Candidate> expected = Arrays.asList(candidate1, candidate2, candidate3);
-       // Assert.assertEquals(candidates, expected);
     }
 
     @Test
@@ -72,6 +69,5 @@ public class CandidateDbStoreTest {
         store.update(new Candidate(candidate.getId(), candidate.getName(), "Changed field", candidate.getCreated(),
                 new City(1, "Москва"), new byte[2]));
         Candidate candidateInDb = store.findById(candidate.getId());
-       // assertThat(candidateInDb.getDescription()).isEqualTo("Changed field");
     }
 }
