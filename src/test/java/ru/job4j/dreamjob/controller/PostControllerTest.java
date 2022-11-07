@@ -1,11 +1,10 @@
 package ru.job4j.dreamjob.controller;
 
-import org.junit.Ignore;
+
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.Model;
-import ru.job4j.dreamjob.controller.PostController;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
@@ -17,8 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+
 import static org.mockito.Mockito.*;
 
 public class PostControllerTest {
@@ -38,9 +36,10 @@ public class PostControllerTest {
         String page = postController.posts(model, httpSession);
         verify(model).addAttribute("posts", posts);
         Assertions.assertEquals(page, "posts");
+        //assertThat(page).isEqualTo("posts");
     }
 
-    @Ignore
+
     @Test
     public void whenCreatePost() {
         Post input = new Post(1, "new post");
@@ -54,7 +53,8 @@ public class PostControllerTest {
         Assertions.assertEquals(page, "redirect:/posts");
     }
 
-    @Ignore
+
+
     @Test
     public void whenAddPost() {
         User user = new User(1, "Alex", "test", "test");
@@ -75,7 +75,7 @@ public class PostControllerTest {
         Assertions.assertEquals(page, "addPost");
     }
 
-    @Ignore
+
     @Test
     public void whenFormUpdatePost() {
         User user = new User(1, "Alex", "test", "test");
@@ -100,7 +100,7 @@ public class PostControllerTest {
         Assertions.assertEquals(page, "updatePost");
     }
 
-    @Ignore
+
     @Test
     public void whenUpdatePost() {
         List<Post> posts = Arrays.asList(
