@@ -21,3 +21,4 @@ CREATE TABLE USERS (
   email varchar unique,
   password text
 );
+
