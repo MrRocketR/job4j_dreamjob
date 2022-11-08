@@ -2,8 +2,9 @@ package ru.job4j.dreamjob.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.AfterClass;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import ru.job4j.Main;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
@@ -42,6 +43,7 @@ public class CandidateDbStoreTest {
                 new City(1, "Москва"), new byte[2]);
         store.add(candidate);
         Candidate candidateInDb = store.findById(candidate.getId());
+        Assertions.assertEquals(candidate.getName(), candidateInDb.getName());
     }
 
     @Test
@@ -58,6 +60,7 @@ public class CandidateDbStoreTest {
         store.add(candidate3);
         List<Candidate> candidates = store.findAll();
         List<Candidate> expected = Arrays.asList(candidate1, candidate2, candidate3);
+        Assertions.assertEquals(expected, candidates);
     }
 
     @Test
@@ -69,5 +72,6 @@ public class CandidateDbStoreTest {
         store.update(new Candidate(candidate.getId(), candidate.getName(), "Changed field", candidate.getCreated(),
                 new City(1, "Москва"), new byte[2]));
         Candidate candidateInDb = store.findById(candidate.getId());
+        Assertions.assertEquals(candidate.getName(), candidateInDb.getName());
     }
 }

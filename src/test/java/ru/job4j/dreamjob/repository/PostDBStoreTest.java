@@ -2,14 +2,16 @@ package ru.job4j.dreamjob.repository;
 
 
 
+
+
+import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import ru.job4j.Main;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.AfterClass;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -42,6 +44,7 @@ public class PostDBStoreTest {
         Post post = new Post(0, "Java Job", "Java", LocalDateTime.now(), new City(1, "Москва"));
         store.add(post);
         Post postInDb = store.findById(post.getId());
+        Assertions.assertEquals(post.getName(), postInDb.getName());
     }
 
     @Test
@@ -58,6 +61,7 @@ public class PostDBStoreTest {
         store.add(post3);
         List<Post> posts = store.findAll();
         List<Post> expected = Arrays.asList(post1, post2, post3);
+        Assertions.assertEquals(expected, posts);
     }
 
     @Test
@@ -69,6 +73,7 @@ public class PostDBStoreTest {
         store.update(new Post(post.getId(), post.getName(), "Changed field", post.getCreated(),
                 new City(1, "Москва")));
         Post postInDb = store.findById(post.getId());
+        Assertions.assertEquals(post.getName(), postInDb.getName());
     }
 
 }

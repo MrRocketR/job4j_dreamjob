@@ -1,8 +1,9 @@
 package ru.job4j.dreamjob.controller;
 
 
-import org.junit.Test;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.ui.Model;
 import ru.job4j.dreamjob.model.City;
@@ -36,7 +37,7 @@ public class PostControllerTest {
         String page = postController.posts(model, httpSession);
         verify(model).addAttribute("posts", posts);
         Assertions.assertEquals(page, "posts");
-        //assertThat(page).isEqualTo("posts");
+
     }
 
 
@@ -110,14 +111,12 @@ public class PostControllerTest {
         Post updPost = new Post(3, "new post", "some text", LocalDateTime.now());
         City city = new City(1, "Москва");
         int updId = 1;
-        Model model = mock((Model.class));
         PostService postService = mock(PostService.class);
         CityService cityService = mock(CityService.class);
         PostController postController = new PostController(postService, cityService);
         when(cityService.findById(city.getId())).thenReturn(city);
         doNothing().when(postService).update(isA(Post.class));
         postService.update(updPost);
-        HttpSession httpSession = new MockHttpSession();
         String page = postController.updatePost(updPost, updId);
         verify(cityService).findById(city.getId());
         verify(postService, times(2)).update(updPost);
