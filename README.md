@@ -27,7 +27,7 @@
 
 1. Создать базу данных с именем dreamjob
 ```sql
-    create database cinema;
+    create database dreamjob;
 ```
 
 2. Собрать проект и запустить приложение Spring Boot
